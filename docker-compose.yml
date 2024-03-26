@@ -1,0 +1,31 @@
+services:
+  web:
+    container_name: web
+    image: rmpweb
+    build:
+      context: ./RMPweb
+      dockerfile: DockerFile
+    ports:
+      - 127.0.0.1:3000:3000
+    networks:
+      - fullstack
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:8.12.2
+    ports:
+      - 127.0.0.1:9200:9200
+      - 127.0.0.1:9300:9300
+    environment:
+      - "discovery.type=single-node"
+      - xpack.security.enabled=false
+      #for testing
+    volumes:
+      - data:/usr/share/elasticsearch/data
+    networks: 
+      - fullstack
+volumes:
+  data:
+networks:
+  fullstack:
+    driver: bridge
