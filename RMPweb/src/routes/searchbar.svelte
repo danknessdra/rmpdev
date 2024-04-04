@@ -1,5 +1,6 @@
 <script lang="ts">
-    export var input:string;
+    export let input:string;
+    export let output:string;
 </script>
 
-<input type="text" placeholder={input} class="input input-bordered w-full max-w-xs" />
+<input type="text" placeholder={input} class="input input-bordered w-full max-w-xs" bind:value={output}/>

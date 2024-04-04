@@ -9,7 +9,7 @@ export default {
           "secondary": "#a991f7",
           "accent": "#37cdbe",
           "neutral": "#3d4451",
-          "base-100": "#FFFFFFFF",
+          "base-100": "#FAF9F6",
         },
         dark: {
           "primary": "#0055FD",

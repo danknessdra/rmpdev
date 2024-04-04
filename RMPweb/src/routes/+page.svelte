@@ -1,25 +1,21 @@
-<script>
+<script lang="ts">
     import SearchBar from "./searchbar.svelte";
-    let test = "red";
+    let school:string = '';
+    let course:string = '';
     
-    function testFunction() {
-        test += "test";
-    }
 </script>
 
 
 <div class='search-box'>
     <div class="card w-96 bg-base-100 shadow-xl bg-primary">
         <div class="card-body">
-        <!-- <h2 class="card-title">Search for your professors</h2> -->
         <div class="search-box-container">
             <h1 class="text-3xl font-bold">RateMyProfessors.help</h1>
             Example:<br>
             School - San Jose State University<br>
             Course - CS 46A
-            
-            <SearchBar input="School" />
-            <SearchBar input="Course" />
+            <SearchBar input="School" bind:output={school}/>
+            <SearchBar input="Course" bind:output={course}/>
             <div class="card-actions justify-end">
                 <button class="btn btn-secondary">Search</button>
             </div>
