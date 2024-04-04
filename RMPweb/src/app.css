@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.search-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 10%;
+}
+
+.search-box-container {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
