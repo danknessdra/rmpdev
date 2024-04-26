@@ -1,4 +1,8 @@
 <script>
-    import "../app.css";
+  import "../app.css";
 </script>
-<slot />
+
+<div class="h-screen bg-secondary">
+  <slot />
+</div>
+
