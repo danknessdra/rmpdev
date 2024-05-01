@@ -2,7 +2,6 @@
   import "../app.css";
 </script>
 
-<div class="h-screen bg-secondary">
+<div class="h-screen">
   <slot />
 </div>
-
