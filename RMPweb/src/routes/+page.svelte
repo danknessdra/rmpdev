@@ -7,6 +7,7 @@
   import * as Card from "$lib/components/ui/card";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
+  import { type Selected } from "bits-ui";
 
   export let data: PageData;
   const form = superForm(data.form, {
@@ -18,7 +19,12 @@
 
   const { form: formData, enhance } = form;
 
-  let schools = [{ value: "U2Nob29sLTg4MQ==", label: "SJSU" }];
+  let schools: Selected<string>[] = [
+    { value: "U2Nob29sLTg4MQ==", label: "SJSU" },
+  ];
+  let courses: Selected<string>[] = [
+    { value: "U2NamesNob29sLTg4MQ==", label: "SJSU" },
+  ];
   let disableCourse = true;
   let disableSubmit = true;
 </script>
