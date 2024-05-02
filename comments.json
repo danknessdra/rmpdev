@@ -1,0 +1,246 @@
+{
+  "data": {
+    "node": {
+      "__typename": "Teacher",
+      "avgDifficulty": 2.6,
+      "avgRating": 5,
+      "courseCodes": [
+        {
+          "courseCount": 2,
+          "courseName": "100W"
+        },
+        {
+          "courseCount": 1,
+          "courseName": "CS-100W"
+        },
+        {
+          "courseCount": 1,
+          "courseName": "HIST-136"
+        }
+      ],
+      "department": "History",
+      "departmentId": "27",
+      "firstName": "Gregory",
+      "id": "VGVhY2hlci0yODY3MzM0",
+      "isProfCurrentUser": false,
+      "isSaved": false,
+      "lastName": "Tomlinson",
+      "legacyId": 2867334,
+      "lockStatus": "none",
+      "numRatings": 4,
+      "ratings": {
+        "edges": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjA=",
+            "node": {
+              "__typename": "Rating",
+              "adminReviewedAt": "2024-02-03 04:24:09 +0000 UTC",
+              "attendanceMandatory": "non mandatory",
+              "clarityRating": 5,
+              "class": "HIST-136",
+              "comment": "lectures engaging. spent some time each class trying to get students to discuss the readings. He pays attention to individual students. When I took the course he was using an experimental system with no deadlines, which worked great for me. No written exams, just very informal short responses and three long essays. Textbooks easily pirated online.",
+              "createdByUser": false,
+              "date": "2024-02-03 04:23:54 +0000 UTC",
+              "difficultyRating": 3,
+              "flagStatus": "UNFLAGGED",
+              "grade": "A",
+              "helpfulRating": 5,
+              "id": "UmF0aW5nLTM4OTQ4OTE0",
+              "isForCredit": true,
+              "isForOnlineClass": false,
+              "legacyId": 38948914,
+              "ratingTags": "Clear grading criteria--Hilarious--Accessible outside class",
+              "teacherNote": null,
+              "textbookUse": 3,
+              "thumbs": [],
+              "thumbsDownTotal": 0,
+              "thumbsUpTotal": 0,
+              "wouldTakeAgain": 1
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjE=",
+            "node": {
+              "__typename": "Rating",
+              "adminReviewedAt": "2024-01-04 01:22:47 +0000 UTC",
+              "attendanceMandatory": "non mandatory",
+              "clarityRating": 5,
+              "class": "CS-100W",
+              "comment": "Super chill history dude. He also talks a lot, but can be funny. This is his first time teaching this course for CS majors, so he is still adjusting. Some assignments and grading criteria were unclear, but there were many adjustments/improvements as the semester progressed. He tries to make this class as helpful and painless as possible.",
+              "createdByUser": false,
+              "date": "2024-01-04 01:22:22 +0000 UTC",
+              "difficultyRating": 2,
+              "flagStatus": "UNFLAGGED",
+              "grade": "A",
+              "helpfulRating": 5,
+              "id": "UmF0aW5nLTM4ODI4MDA0",
+              "isForCredit": true,
+              "isForOnlineClass": false,
+              "legacyId": 38828004,
+              "ratingTags": "",
+              "teacherNote": null,
+              "textbookUse": -1,
+              "thumbs": [],
+              "thumbsDownTotal": 0,
+              "thumbsUpTotal": 0,
+              "wouldTakeAgain": 1
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjI=",
+            "node": {
+              "__typename": "Rating",
+              "adminReviewedAt": "2023-11-15 20:49:21 +0000 UTC",
+              "attendanceMandatory": "non mandatory",
+              "clarityRating": 5,
+              "class": "100W",
+              "comment": "A skill class like this one is more personal than being tested on dates and events, but professor makes the class as workable and pain-free as possible. Assigns good readings, and has a broad tolerance for different styles & interests among students. Very good comments and suggestions that do reflect how your writing will be seen in other classes.",
+              "createdByUser": false,
+              "date": "2023-11-15 20:49:10 +0000 UTC",
+              "difficultyRating": 3,
+              "flagStatus": "UNFLAGGED",
+              "grade": "Rather not say",
+              "helpfulRating": 5,
+              "id": "UmF0aW5nLTM4Mzk5MjY0",
+              "isForCredit": false,
+              "isForOnlineClass": false,
+              "legacyId": 38399264,
+              "ratingTags": "Gives good feedback--Respected--Accessible outside class",
+              "teacherNote": null,
+              "textbookUse": 3,
+              "thumbs": [],
+              "thumbsDownTotal": 0,
+              "thumbsUpTotal": 0,
+              "wouldTakeAgain": 1
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjM=",
+            "node": {
+              "__typename": "Rating",
+              "adminReviewedAt": "2023-06-17 17:38:04 +0000 UTC",
+              "attendanceMandatory": "non mandatory",
+              "clarityRating": 5,
+              "class": "100W",
+              "comment": "I had Tomlinson for a couple of courses, he is somewhat tough but fair. Very approachable and sardonic. I liked his WW2 class, he is very knowledgable about Europe, which is his are of expertise. I would recommend his classes, and if you're a history major you probably can't avoid him since he teaches 100W. ",
+              "createdByUser": false,
+              "date": "2023-04-16 17:43:15 +0000 UTC",
+              "difficultyRating": 2,
+              "flagStatus": "UNFLAGGED",
+              "grade": "A",
+              "helpfulRating": 5,
+              "id": "UmF0aW5nLTM3NjQwNDQ3",
+              "isForCredit": true,
+              "isForOnlineClass": false,
+              "legacyId": 37640447,
+              "ratingTags": "Get ready to read--Participation matters--Accessible outside class",
+              "teacherNote": null,
+              "textbookUse": -1,
+              "thumbs": [
+                {
+                  "computerId": "x9Sd5XCdAW-20231015",
+                  "id": "VGh1bWItNTIwMDE2NjI=",
+                  "thumbsDown": 0,
+                  "thumbsUp": 1
+                }
+              ],
+              "thumbsDownTotal": 0,
+              "thumbsUpTotal": 1,
+              "wouldTakeAgain": 1
+            }
+          }
+        ],
+        "pageInfo": {
+          "endCursor": "YXJyYXljb25uZWN0aW9uOjM=",
+          "hasNextPage": false
+        }
+      },
+      "ratingsDistribution": {
+        "r1": 0,
+        "r2": 0,
+        "r3": 0,
+        "r4": 0,
+        "r5": 4,
+        "total": 4
+      },
+      "relatedTeachers": [
+        {
+          "avgRating": 5.3,
+          "firstName": "Ray",
+          "id": "UmVsYXRlZFRlYWNoZXItMTcyMTg0Mg==",
+          "lastName": "Buyco",
+          "legacyId": 1721842
+        },
+        {
+          "avgRating": 5,
+          "firstName": "Alberto",
+          "id": "UmVsYXRlZFRlYWNoZXItMjM2MjIxMA==",
+          "lastName": "Garcia",
+          "legacyId": 2362210
+        },
+        {
+          "avgRating": 5,
+          "firstName": "Allison",
+          "id": "UmVsYXRlZFRlYWNoZXItNzUxMjk4",
+          "lastName": "Katsev",
+          "legacyId": 751298
+        }
+      ],
+      "school": {
+        "avgRating": 0,
+        "city": "San Jose",
+        "country": "0-US-United States",
+        "id": "U2Nob29sLTg4MQ==",
+        "legacyId": 881,
+        "name": "San Jose State University",
+        "numRatings": 491,
+        "state": "CA"
+      },
+      "teacherRatingTags": [
+        {
+          "id": "VGVhY2hlclJhdGluZ1RhZ3MtMg==",
+          "legacyId": 2,
+          "tagCount": 1,
+          "tagName": "Get ready to read"
+        },
+        {
+          "id": "VGVhY2hlclJhdGluZ1RhZ3MtMw==",
+          "legacyId": 3,
+          "tagCount": 1,
+          "tagName": "Participation matters"
+        },
+        {
+          "id": "VGVhY2hlclJhdGluZ1RhZ3MtOQ==",
+          "legacyId": 9,
+          "tagCount": 1,
+          "tagName": "Clear grading criteria"
+        },
+        {
+          "id": "VGVhY2hlclJhdGluZ1RhZ3MtMTI=",
+          "legacyId": 12,
+          "tagCount": 1,
+          "tagName": "Gives good feedback"
+        },
+        {
+          "id": "VGVhY2hlclJhdGluZ1RhZ3MtMTU=",
+          "legacyId": 15,
+          "tagCount": 1,
+          "tagName": "Hilarious"
+        },
+        {
+          "id": "VGVhY2hlclJhdGluZ1RhZ3MtMTk=",
+          "legacyId": 19,
+          "tagCount": 1,
+          "tagName": "Respected"
+        },
+        {
+          "id": "VGVhY2hlclJhdGluZ1RhZ3MtMjM=",
+          "legacyId": 23,
+          "tagCount": 3,
+          "tagName": "Accessible outside class"
+        }
+      ],
+      "wouldTakeAgainPercent": 100
+    }
+  }
+}
