@@ -1,22 +1,29 @@
 <script lang="ts">
   import { Combobox, type Selected } from "bits-ui";
   export let items: Selected<string>[] = [];
-  export let selectedValue = "";
+  export let value = "";
   export let touchedInput = false;
   export let placeholder = "";
   export let inputProps = {};
   $: filteredItems =
-    selectedValue && touchedInput
-      ? items.filter((item) => item.value.includes(selectedValue.toLowerCase()))
+    value && touchedInput
+      ? items.filter((item) => item.value.includes(value.toLowerCase()))
       : items;
+  export let onSelectedChange = () => {};
+  export let disabled = false;
 </script>
 
-<Combobox.Root bind:inputValue={selectedValue} bind:touchedInput>
+<Combobox.Root
+  bind:inputValue={value}
+  bind:touchedInput
+  {onSelectedChange}
+  bind:disabled
+>
   <Combobox.Input {placeholder} />
   <Combobox.Label />
-  <Combobox.Content>
+  <Combobox.Content class="bg-white border-solid border-2 rounded-sm">
     {#each items as item (item.value)}
-      <Combobox.Item {...item} class="bg-white">
+      <Combobox.Item {...item} class="hover:bg-blue-200">
         <Combobox.ItemIndicator />
         {item.label}
       </Combobox.Item>

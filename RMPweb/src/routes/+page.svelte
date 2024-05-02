@@ -5,26 +5,26 @@
   import { formSchema, type FormSchema } from "./search/schema";
   import Searchbar from "./searchbar.svelte";
   import * as Card from "$lib/components/ui/card";
-  import {
-    type SuperValidated,
-    type Infer,
-    superForm,
-  } from "sveltekit-superforms";
+  import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
 
   export let data: PageData;
   const form = superForm(data.form, {
     validators: zodClient(formSchema),
+    // onUpdated: ({ form: f }) => {
+    //   console.log(f);
+    // },
   });
 
   const { form: formData, enhance } = form;
 
   let schools = [{ value: "U2Nob29sLTg4MQ==", label: "SJSU" }];
-  let selectedSchoolId = "";
+  let disableCourse = true;
+  let disableSubmit = true;
 </script>
 
 <div
-  class="search-page w-full h-full flex flex-col justify-center items-center align-middle"
+  class="w-full h-full flex flex-col justify-center items-center align-middle"
 >
   <Card.Root>
     <Card.Header>
@@ -37,16 +37,35 @@
           <Form.Control let:attrs>
             <Searchbar
               items={schools}
-              selectedValue={selectedSchoolId}
+              bind:value={$formData.schoolId}
               placeholder="School name"
               inputProps={attrs}
+              onSelectedChange={() => {
+                disableCourse = false;
+              }}
             />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
-        <Form.Button class="btn btn-secondary">Search</Form.Button>
+        <Form.Field {form} name="course">
+          <Form.Control let:attrs>
+            <Searchbar
+              items={schools}
+              bind:value={$formData.course}
+              placeholder="Course name"
+              inputProps={attrs}
+              disabled={disableCourse}
+              onSelectedChange={() => {
+                disableSubmit = false;
+              }}
+            />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Form.Button class="btn btn-secondary" disabled={disableSubmit}>
+          Search
+        </Form.Button>
       </form>
     </Card.Content>
-    <Card.Footer></Card.Footer>
   </Card.Root>
 </div>
