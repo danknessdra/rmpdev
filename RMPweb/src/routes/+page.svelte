@@ -8,6 +8,7 @@
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { type Selected } from "bits-ui";
+  import type { SearchRequest } from "@elastic/elasticsearch/lib/api/types.js";
 
   export let data: PageData;
   const form = superForm(data.form, {
@@ -22,11 +23,10 @@
   let schools: Selected<string>[] = [
     { value: "U2Nob29sLTg4MQ==", label: "SJSU" },
   ];
-  let courses: Selected<string>[] = [
-    { value: "U2NamesNob29sLTg4MQ==", label: "SJSU" },
-  ];
+  let courses: Selected<string>[] = [];
   let disableCourse = true;
   let disableSubmit = true;
+  let query: SearchRequest;
 </script>
 
 <div
@@ -47,7 +47,23 @@
               placeholder="School name"
               inputProps={attrs}
               onSelectedChange={() => {
-                disableCourse = false;
+                disableCourse = true;
+                query = {
+                  index: "books",
+                  query: {
+                    match_all: {},
+                  },
+                };
+                fetch("/api/search/", {
+                  method: "POST",
+                  body: JSON.stringify(query),
+                })
+                  .then((res) => res.json())
+                  .then((result) => {
+                    courses = result;
+                    console.log(courses);
+                    disableCourse = false;
+                  });
               }}
             />
           </Form.Control>
