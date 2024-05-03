@@ -7,7 +7,9 @@
   export let inputProps = {};
   $: filteredItems =
     value && touchedInput
-      ? items.filter((item) => item.value.includes(value.toLowerCase()))
+      ? items.filter((item) =>
+          item.label?.toLowerCase().includes(value.toLowerCase()),
+        )
       : items;
   export let onSelectedChange = () => {};
   export let disabled = false;
@@ -22,7 +24,7 @@
   <Combobox.Input {placeholder} />
   <Combobox.Label />
   <Combobox.Content class="bg-white border-solid border-2 rounded-sm">
-    {#each items as item (item.value)}
+    {#each filteredItems as item (item.value)}
       <Combobox.Item {...item} class="hover:bg-blue-200">
         <Combobox.ItemIndicator />
         {item.label}
