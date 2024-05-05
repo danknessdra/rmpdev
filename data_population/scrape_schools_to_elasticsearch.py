@@ -63,7 +63,7 @@ _ = client.indices.create(
         "city": {"type": "text"},
         "name": {"type": "text"},
         "state": {"type": "text"},
-        "legacyId": {"type": "text"},
+        "legacyId": {"type": "short"},
       }
     },
   },
