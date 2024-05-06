@@ -9,8 +9,9 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { type Selected } from "bits-ui";
   import type { SearchRequest } from "@elastic/elasticsearch/lib/api/types.js";
+  import { debounce } from "lodash-es";
+  import type { SearchResponse } from "@elastic/elasticsearch/lib/api/typesWithBodyKey.js";
   // import { browser, building, dev, version } from "$app/environment";
-
   export let data: PageData;
   const form = superForm(data.form, {
     validators: zodClient(formSchema), // onUpdated: ({ form: f }) => { console.log(f);
@@ -19,6 +20,13 @@
 
   const { form: formData, enhance } = form;
 
+  let elasticSearchRequest: SearchRequest;
+  elasticSearchRequest = {
+    index: "schools",
+    query: {
+      match_all: {},
+    },
+  };
   let schools: Selected<string>[] = [
     { value: "U2Nob29sLTg4MQ==", label: "SJSU" },
     { value: "asdf", label: "SJSU" },
@@ -26,7 +34,6 @@
   let courses: Selected<string>[] = [];
   let disableCourse = true;
   let disableSubmit = true;
-  let elasticSearchRequest: SearchRequest;
   // let trySaveSearch = () => {};
   // let savedSearches: FormSchema[] = [];
   // if (browser) {
@@ -41,6 +48,27 @@
   //         course: formData.get("course"),
   //       }, ]; };
   // }
+  // let inputtedSchool = "";
+  // $: console.log(inputtedSdebounce((event) => {
+  const handleSchoolInput = debounce((event) => {
+    const currentInput = event.detail.currentTarget.value;
+    elasticSearchRequest = {
+      index: "schools",
+      query: {
+        match: { name: currentInput },
+      },
+    };
+    fetch("/api/search/", {
+      method: "POST",
+      body: JSON.stringify(elasticSearchRequest),
+    })
+      .then((res) => res.json())
+      .then((result: SearchResponse) => {
+        schools = result.hits.hits.map((hit) => {
+          return { value: hit._id, label: hit._source.name };
+        });
+      });
+  }, 1000);
 </script>
 
 <div
@@ -62,16 +90,19 @@
             <Form.Field {form} name="schoolId">
               <Form.Control let:attrs>
                 <Searchbar
-                  items={schools}
-                  bind:value={$formData.schoolId}
+                  bind:items={schools}
                   placeholder="School name"
                   inputProps={attrs}
+                  bind:selectedValue={$formData.schoolId}
+                  on:input={handleSchoolInput}
                   on:selectedchange={(event) => {
                     console.log(event);
                     disableCourse = true;
                     elasticSearchRequest = {
-                      index: "books",
-                      query: {},
+                      index: "schools",
+                      query: {
+                        match: { name: "" },
+                      },
                     };
                     fetch("/api/search/", {
                       method: "POST",
@@ -91,7 +122,7 @@
               <Form.Control let:attrs>
                 <Searchbar
                   items={courses}
-                  bind:value={$formData.course}
+                  bind:selectedValue={$formData.course}
                   placeholder="Course name"
                   inputProps={attrs}
                   disabled={disableCourse}

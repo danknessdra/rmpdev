@@ -4,21 +4,18 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let items: Selected<string>[] = [];
-  export let value = "";
+  export let selectedValue = "";
   export let touchedInput = false;
   export let placeholder = "";
   export let inputProps = {};
   export let disabled = false;
-  $: filteredItems =
-    value && touchedInput
-      ? items.filter((item) =>
-          item.label?.toLowerCase().includes(value.toLowerCase()),
-        )
-      : items;
+  export let loading = false;
+  // export let inputtedLabel = "";
+  $: filteredItems = items ?? [];
 </script>
 
 <Combobox.Root
-  bind:inputValue={value}
+  bind:inputValue={selectedValue}
   bind:touchedInput
   onSelectedChange={(event) => {
     dispatch("selectedchange", event);
@@ -28,6 +25,7 @@
   <!-- classes are taken from the shadcn input -->
   <Combobox.Input
     {placeholder}
+    on:input
     class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm
     ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium
     placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
