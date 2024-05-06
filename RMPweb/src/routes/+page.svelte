@@ -9,6 +9,7 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { type Selected } from "bits-ui";
   import type { SearchRequest } from "@elastic/elasticsearch/lib/api/types.js";
+  import elasticSearch from "$lib/elasticSearch";
   import { debounce } from "lodash-es";
   import type { SearchResponse } from "@elastic/elasticsearch/lib/api/typesWithBodyKey.js";
   // import { browser, building, dev, version } from "$app/environment";
@@ -20,54 +21,33 @@
 
   const { form: formData, enhance } = form;
 
-  let elasticSearchRequest: SearchRequest;
-  elasticSearchRequest = {
-    index: "schools",
-    query: {
-      match_all: {},
-    },
-  };
+  // let elasticSearchRequest: SearchRequest;
+  // elasticSearchRequest = {
+  //   index: "schools",
+  //   query: {
+  //     match_all: {},
+  //   },
+  // };
   let schools: Selected<string>[] = [
     { value: "U2Nob29sLTg4MQ==", label: "SJSU" },
     { value: "asdf", label: "SJSU" },
   ];
+
   let courses: Selected<string>[] = [];
   let disableCourse = true;
   let disableSubmit = true;
-  // let trySaveSearch = () => {};
-  // let savedSearches: FormSchema[] = [];
-  // if (browser) {
-  //   savedSearches = localStorage.getItem("savedSearches") ?? [];
-  //   trySaveSearch = (e: SubmitEvent) => {
-  //     console.log(e);
-  //     const formData = new FormData(e.target as HTMLFormElement);
-  //     savedSearches = [
-  //       ...savedSearches,
-  //       {
-  //         schoolId: formData.get("schoolId"),
-  //         course: formData.get("course"),
-  //       }, ]; };
-  // }
-  // let inputtedSchool = "";
-  // $: console.log(inputtedSdebounce((event) => {
   const handleSchoolInput = debounce((event) => {
     const currentInput = event.detail.currentTarget.value;
-    elasticSearchRequest = {
+    elasticSearch({
       index: "schools",
       query: {
         match: { name: currentInput },
       },
-    };
-    fetch("/api/search/", {
-      method: "POST",
-      body: JSON.stringify(elasticSearchRequest),
-    })
-      .then((res) => res.json())
-      .then((result: SearchResponse) => {
-        schools = result.hits.hits.map((hit) => {
-          return { value: hit._id, label: hit._source.name };
-        });
+    }).then((result: SearchResponse) => {
+      schools = result.hits.hits.map((hit) => {
+        return { value: hit._id, label: hit._source.name };
       });
+    });
   }, 1000);
 </script>
 
@@ -94,25 +74,23 @@
                   placeholder="School name"
                   inputProps={attrs}
                   bind:selectedValue={$formData.schoolId}
-                  on:input={handleSchoolInput}
-                  on:selectedchange={(event) => {
-                    console.log(event);
+                  on:input={(event) => {
+                    disableSubmit = true;
                     disableCourse = true;
-                    elasticSearchRequest = {
-                      index: "schools",
+                    handleSchoolInput(event);
+                  }}
+                  on:selectedchange={(event) => {
+                    elasticSearch({
+                      index: "sjsu_professors",
                       query: {
-                        match: { name: "" },
+                        match: { schoolId: event.detail.selectedValue },
                       },
-                    };
-                    fetch("/api/search/", {
-                      method: "POST",
-                      body: JSON.stringify(elasticSearchRequest),
-                    })
-                      .then((res) => res.json())
-                      .then((result) => {
-                        courses = result;
-                        disableCourse = false;
+                    }).then((result) => {
+                      courses = result.hits.hits.map((hit) => {
+                        return { value: hit._id, label: hit._source.name };
                       });
+                      disableCourse = false;
+                    });
                   }}
                 />
               </Form.Control>
