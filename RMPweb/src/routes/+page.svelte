@@ -9,7 +9,7 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { type Selected } from "bits-ui";
   import type { SearchRequest } from "@elastic/elasticsearch/lib/api/types.js";
-  import elasticSearch from "$lib/elasticSearch";
+  import elasticSearch from "$lib/elasticsearch";
   import { debounce } from "lodash-es";
   import type { SearchResponse } from "@elastic/elasticsearch/lib/api/typesWithBodyKey.js";
   // import { browser, building, dev, version } from "$app/environment";
