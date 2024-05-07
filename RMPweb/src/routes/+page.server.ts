@@ -1,8 +1,9 @@
-import type { PageServerLoad, Actions } from "./search/$types.js";
-import { fail } from "@sveltejs/kit";
+import type { PageServerLoad } from "./search/[schoolId]/$types.js";
+import { fail, type Actions } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { formSchema } from "./search/schema.js";
 import { zod } from "sveltekit-superforms/adapters";
+import { redirect } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async () => {
   return {
@@ -18,8 +19,11 @@ export const actions: Actions = {
         form,
       });
     }
-    return {
-      form,
-    };
+    const url = new URL(event.url);
+    event.url.searchParams.set("course", form.data.course);
+    throw redirect(
+      302,
+      `/search/${form.data.schoolId}?course=${encodeURIComponent(form.data.course)}`,
+    );
   },
 };

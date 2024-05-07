@@ -12,6 +12,8 @@
   import elasticSearch from "$lib/elasticsearch";
   import { debounce } from "lodash-es";
   import type { SearchResponse } from "@elastic/elasticsearch/lib/api/typesWithBodyKey.js";
+  import { onMount } from "svelte";
+  import { Input } from "$lib/components/ui/input/index.js";
   // import { browser, building, dev, version } from "$app/environment";
   export let data: PageData;
   const form = superForm(data.form, {
@@ -21,17 +23,19 @@
 
   const { form: formData, enhance } = form;
 
-  // let elasticSearchRequest: SearchRequest;
-  // elasticSearchRequest = {
-  //   index: "schools",
-  //   query: {
-  //     match_all: {},
-  //   },
-  // };
-  let schools: Selected<string>[] = [
-    { value: "U2Nob29sLTg4MQ==", label: "SJSU" },
-    { value: "asdf", label: "SJSU" },
-  ];
+  let schools: Selected<string>[] = [];
+  onMount(() => {
+    elasticSearch({
+      index: "schools",
+      query: {
+        match_all: {},
+      },
+    }).then((result: SearchResponse) => {
+      schools = result.hits.hits.map((hit) => {
+        return { value: hit._id, label: hit._source.name };
+      });
+    });
+  });
 
   let courses: Selected<string>[] = [];
   let disableCourse = true;
@@ -48,7 +52,23 @@
         return { value: hit._id, label: hit._source.name };
       });
     });
-  }, 1000);
+  }, 500);
+  function handleSchoolSelection(event: CustomEvent<{ value: string }>) {
+    elasticSearch({
+      index: "sjsu_professors",
+      query: {
+        match_all: {},
+      },
+    }).then((result: { hits: { hits: any[] } }) => {
+      console.log(result);
+      courses = result.hits.hits.map(
+        (hit: { _id: any; _source: { name: any } }) => {
+          return { value: hit._id, label: hit._source.name };
+        },
+      );
+      disableCourse = false;
+    });
+  }
 </script>
 
 <div
@@ -79,33 +99,35 @@
                     disableCourse = true;
                     handleSchoolInput(event);
                   }}
-                  on:selectedchange={(event) => {
-                    elasticSearch({
-                      index: "sjsu_professors",
-                      query: {
-                        match: { schoolId: event.detail.selectedValue },
-                      },
-                    }).then((result) => {
-                      courses = result.hits.hits.map((hit) => {
-                        return { value: hit._id, label: hit._source.name };
-                      });
-                      disableCourse = false;
-                    });
-                  }}
+                  on:selectedchange={handleSchoolSelection}
                 />
               </Form.Control>
               <Form.FieldErrors />
             </Form.Field>
             <Form.Field {form} name="course">
               <Form.Control let:attrs>
-                <Searchbar
-                  items={courses}
-                  bind:selectedValue={$formData.course}
+                <!-- <Searchbar -->
+                <!--   items={courses} -->
+                <!--   bind:selectedValue={$formData.course} -->
+                <!--   placeholder="Course name" -->
+                <!--   inputProps={attrs} -->
+                <!--   disabled={disableCourse} -->
+                <!--   on:selectedchange={() => { -->
+                <!--     disableSubmit = false; -->
+                <!--   }} -->
+                <!-- /> -->
+
+                <!-- down the line we might be able to upgrade this to a Searchbar with suggested course names but i'm lazy -->
+                <Input
+                  {...attrs}
                   placeholder="Course name"
-                  inputProps={attrs}
-                  disabled={disableCourse}
-                  on:selectedchange={() => {
-                    disableSubmit = false;
+                  bind:value={$formData.course}
+                  on:input={() => {
+                    if ($formData.course) {
+                      disableSubmit = false;
+                    } else {
+                      disableSubmit = true;
+                    }
                   }}
                 />
               </Form.Control>
