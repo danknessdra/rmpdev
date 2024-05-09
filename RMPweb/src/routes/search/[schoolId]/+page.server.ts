@@ -21,7 +21,6 @@ export const load: PageServerLoad = async ({ params, url, fetch }) => {
       },
     }),
   });
-  console.log(courses);
   return {
     courses: await courses.json(),
   };

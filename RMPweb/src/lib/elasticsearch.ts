@@ -7,7 +7,6 @@ export default function elasticSearch(
     method: "POST",
     body: JSON.stringify(elasticSearchRequest),
   }).then((res) => {
-    console.log(res);
-    // res.json();
+    return res.json();
   });
 }

@@ -10,7 +10,6 @@
   export let inputProps = {};
   export let disabled = false;
   export let loading = false;
-  // export let inputtedLabel = "";
   $: filteredItems = items ?? [];
 </script>
 

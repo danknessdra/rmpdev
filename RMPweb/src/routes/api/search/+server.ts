@@ -15,7 +15,6 @@ const client = new Client({
 });
 
 export async function POST({ request }: { request: Request }) {
-  console.log("request", request);
   const searchParams = await request.json();
   console.log("searchParams", searchParams);
   // type of SearchRequest
