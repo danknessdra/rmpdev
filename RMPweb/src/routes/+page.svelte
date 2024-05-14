@@ -85,8 +85,10 @@
     <Tabs.Content value="search">
       <Card.Root class="min-w-40">
         <Card.Header>
-          <Card.Title>RateMyProfessors.help</Card.Title>
-          <Card.Description>Search for a school...</Card.Description>
+          <Card.Title>Courseview Search</Card.Title>
+          <Card.Description>
+            Look up all the professors for a course at your school...
+          </Card.Description>
         </Card.Header>
         <form method="POST" use:enhance>
           <Card.Content>
