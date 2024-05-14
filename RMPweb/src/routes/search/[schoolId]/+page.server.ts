@@ -14,10 +14,11 @@ export const load: PageServerLoad = async ({ params, url, fetch }) => {
     {
       index: "sjsu_professors",
       query: {
-        terms: {
-          "node.courseCodes.courseName": [course],
+        simple_query_string: {
+          "query": course,
         },
       },
+      size: 10000,
     },
     fetch,
   );
