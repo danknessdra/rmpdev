@@ -10,18 +10,18 @@ export const load: PageServerLoad = async ({ params, url, fetch }) => {
   if (!course) {
     error(400, "Missing course parameter");
   }
-  const courses = await fetch("/api/search/", {
-    method: "POST",
-    body: JSON.stringify({
+  const res = await elasticSearch(
+    {
       index: "sjsu_professors",
       query: {
         terms: {
           "node.courseCodes.courseName": [course],
         },
       },
-    }),
-  });
+    },
+    fetch,
+  );
   return {
-    courses: await courses.json(),
+    courses: await res,
   };
 };

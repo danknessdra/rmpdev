@@ -20,10 +20,8 @@ export const actions: Actions = {
       });
     }
     const url = new URL(event.url);
+    console.log("url", url);
     event.url.searchParams.set("course", form.data.course);
-    throw redirect(
-      302,
-      `/search/${form.data.schoolId}?course=${encodeURIComponent(form.data.course)}`,
-    );
+    redirect(302, `/search/${form.data.schoolId}?course=${form.data.course}`);
   },
 };

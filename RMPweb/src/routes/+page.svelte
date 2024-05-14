@@ -17,9 +17,9 @@
   export let data: PageData;
   const form = superForm(data.form, {
     validators: zodClient(formSchema),
-    onUpdated: ({ form: f }) => {
-      console.log(f);
-    },
+    // onUpdated: ({ form: f }) => {
+    //   console.log(f);
+    // },
   });
 
   const { form: formData, enhance } = form;
