@@ -32,6 +32,7 @@
         match_all: {},
       },
     }).then((result: SearchResponse) => {
+      console.log("initial population");
       schools = result.hits.hits.map((hit) => {
         return { value: hit._id, label: hit._source.name };
       });
@@ -41,6 +42,7 @@
   let courses: Selected<string>[] = [];
   let disableCourse = true;
   let disableSubmit = true;
+  let schoolsLoading = false;
   const handleSchoolInput = debounce((event) => {
     const currentInput = event.detail.currentTarget.value;
     elasticSearch({
@@ -52,6 +54,7 @@
       schools = result.hits.hits.map((hit) => {
         return { value: hit._id, label: hit._source.name };
       });
+      schoolsLoading = false;
     });
   }, 500);
   function handleSchoolSelection(event: CustomEvent<{ value: string }>) {
@@ -94,9 +97,11 @@
                   placeholder="School name"
                   inputProps={attrs}
                   bind:selectedValue={$formData.schoolId}
+                  bind:loading={schoolsLoading}
                   on:input={(event) => {
                     disableSubmit = true;
                     disableCourse = true;
+                    schoolsLoading = true;
                     handleSchoolInput(event);
                   }}
                   on:selectedchange={handleSchoolSelection}

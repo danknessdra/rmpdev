@@ -10,7 +10,6 @@
   export let inputProps = {};
   export let disabled = false;
   export let loading = false;
-  $: filteredItems = items ?? [];
 </script>
 
 <Combobox.Root
@@ -32,15 +31,21 @@
   />
   <Combobox.Label />
   <Combobox.Content class="bg-white border-solid border-2 rounded-md p-2">
-    {#each filteredItems as item, i (item.value)}
-      {#if i > 0}
-        <Separator />
-      {/if}
-      <Combobox.Item {...item} class="hover:bg-blue-200 p-2">
-        <Combobox.ItemIndicator />
-        {item.label}
-      </Combobox.Item>
-    {/each}
+    {#if loading}
+      Loading...
+    {:else if items.length == 0}
+      No items found...
+    {:else}
+      {#each items as item, i (item.value)}
+        {#if i > 0}
+          <Separator />
+        {/if}
+        <Combobox.Item {...item} class="hover:bg-blue-200 p-2">
+          <Combobox.ItemIndicator />
+          {item.label}
+        </Combobox.Item>
+      {/each}
+    {/if}
     <Combobox.Separator />
   </Combobox.Content>
   <Combobox.Arrow />
