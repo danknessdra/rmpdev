@@ -1,15 +1,4 @@
 services:
-  web:
-    container_name: web
-    image: rmpweb
-    build:
-      context: ./RMPweb
-      dockerfile: DockerFile
-    ports:
-      - 127.0.0.1:3000:3000
-    networks:
-      - fullstack
-
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.2
     container_name : kibana
