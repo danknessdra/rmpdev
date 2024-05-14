@@ -3,7 +3,6 @@ export default function elasticSearch(
   elasticSearchRequest: SearchRequest,
   customFetch = fetch,
 ) {
-  console.log("elasticSearchRequest", elasticSearchRequest);
   return customFetch("/api/search", {
     method: "POST",
     headers: {
@@ -11,7 +10,6 @@ export default function elasticSearch(
     },
     body: JSON.stringify(elasticSearchRequest),
   }).then((res) => {
-    console.log("res", res);
     return res.json();
   });
 }

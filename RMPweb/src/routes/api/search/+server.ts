@@ -15,10 +15,7 @@ const client = new Client({
 });
 
 export async function POST({ request }: { request: Request }) {
-  console.log("api request", request);
   const searchParams = await request.json();
-  console.log("searchParams", searchParams);
   const res = await client.search(searchParams);
-  console.log("elastic response", res);
   return json(res, { status: 201 });
 }
