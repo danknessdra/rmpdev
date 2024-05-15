@@ -34,6 +34,7 @@
       query: {
         match_all: {},
       },
+      size: 20,
     }).then((result: SearchResponse) => {
       console.log("initial population");
       schools = result.hits.hits.map((hit) => {

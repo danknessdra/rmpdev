@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Combobox, type Selected } from "bits-ui";
   import { Separator } from "$lib/components/ui/separator";
+  import { ScrollArea } from "$lib/components/ui/scroll-area";
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
   const dispatch = createEventDispatcher();
@@ -32,7 +33,10 @@
   />
   <Combobox.Label />
   <Combobox.Content class="bg-white border-solid border-2 rounded-md p-2">
-    <div transition:slide={{ duration: 200 }}>
+    <div
+      transition:slide={{ duration: 200 }}
+      class="overflow-y-scroll max-h-96"
+    >
       {#if loading}
         Loading...
       {:else if items.length == 0}
