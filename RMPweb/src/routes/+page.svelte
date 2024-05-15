@@ -87,7 +87,7 @@
         <Card.Header>
           <Card.Title>General Search</Card.Title>
           <Card.Description>
-            Search for anything on RateMyProfessors. 
+            Search for anything on RateMyProfessors.com
           </Card.Description>
         </Card.Header>
         <form method="POST" use:enhance>
