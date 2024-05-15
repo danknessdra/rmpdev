@@ -137,11 +137,7 @@
                   placeholder="Query"
                   bind:value={$formData.course}
                   on:input={() => {
-                    if ($formData.course) {
-                      disableSubmit = false;
-                    } else {
-                      disableSubmit = true;
-                    }
+                    disableSubmit = !Boolean($formData.course);
                   }}
                 />
               </Form.Control>
@@ -201,11 +197,7 @@
                   placeholder="Query"
                   bind:value={$formData.course}
                   on:input={() => {
-                    if ($formData.course) {
-                      disableSubmit = false;
-                    } else {
-                      disableSubmit = true;
-                    }
+                    disableSubmit = !Boolean($formData.course);
                   }}
                 />
               </Form.Control>
