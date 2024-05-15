@@ -19,8 +19,6 @@
     });
     return;
 	}
-  console.log("courses", sortData("avgRating"));
-  console.log("schoolId", $page.params.schoolId);
 </script>
 
 
