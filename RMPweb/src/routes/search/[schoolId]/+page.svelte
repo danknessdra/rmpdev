@@ -2,12 +2,26 @@
   import { Combobox } from "bits-ui";
   import { page } from "$app/stores";
   import * as Table from "$lib/components/ui/table";
+  import '@fortawesome/fontawesome-free/css/all.min.css'
 
   const results = $page.data.courses;
-  console.log("courses", results);
+  let result_data = results.hits.hits;
+  let asc = -1;
+  function getSortIcon() {
+		return '<i class="fas fa-sort"></i>';
+	}
+  function sortData(key:string) {
+    asc = -asc;
+		result_data = result_data.sort(function(a, b) {
+      var x = a["_source"]["node"][key]; 
+      var y = b["_source"]["node"][key];
+      return asc == -1 ? ((x < y) ? -1 : ((x > y) ? 1 : 0)) : ((x < y) ? 1 : ((x > y) ? -1 : 0));
+    });
+    return;
+	}
+  console.log("courses", sortData("avgRating"));
   console.log("schoolId", $page.params.schoolId);
 </script>
-
 
 
 {#if results}
@@ -16,14 +30,14 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[100px]">Name</Table.Head>
-        <Table.Head>Difficulty</Table.Head>
-        <Table.Head>Would Take Again %</Table.Head>
-        <Table.Head># of Ratings</Table.Head>
-        <Table.Head class="text-right">Ratings</Table.Head>
+        <Table.Head><div on:click={() => sortData('avgDifficulty')}>Difficulty {@html getSortIcon()}</div></Table.Head>
+        <Table.Head><div on:click={() => sortData('wouldTakeAgainPercent')}>Would Take Again % {@html getSortIcon()}</div></Table.Head>
+        <Table.Head><div on:click={() => sortData('numRatings')}># of Ratings {@html getSortIcon()}</div></Table.Head>
+        <Table.Head class="text-right"><div on:click={() => sortData('avgRating')}>Ratings {@html getSortIcon()}</div></Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
-    {#each results.hits.hits as result}
+    {#each result_data as result}
       <Table.Row>
         <Table.Cell class="font-medium text-lg"><a href = "https://www.ratemyprofessors.com/professor/{atob(result._source.node.id).slice(8)}" class = "underline underline-offset-2" target="_blank" rel="noopener noreferrer">{result._source.node.firstName} {result._source.node.lastName}</a></Table.Cell>
         <Table.Cell class="font-medium text-base">{result._source.node.avgDifficulty}</Table.Cell>
