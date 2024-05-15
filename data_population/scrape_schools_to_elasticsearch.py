@@ -53,21 +53,24 @@ if len(schools) == 0:
   json.dump(schools, open('schools.json', 'w'))
 
 print(schools[0])
-_ = client.indices.create(
-  index="schools",
-  body={
-    "settings": {"number_of_shards": 1},
-    "mappings": {
-      "properties": {
-        "avgRating": {"type": "scaled_float", "scaling_factor": 100},
-        "city": {"type": "text"},
-        "name": {"type": "text"},
-        "state": {"type": "text"},
-        "legacyId": {"type": "short"},
-      }
-    },
-  },
-)
+try:
+    _ = client.indices.create(
+      index="schools",
+      body={
+        "settings": {"number_of_shards": 1},
+        "mappings": {
+          "properties": {
+            "avgRating": {"type": "scaled_float", "scaling_factor": 100},
+            "city": {"type": "text"},
+            "name": {"type": "text"},
+            "state": {"type": "text"},
+            "legacyId": {"type": "short"},
+          }
+        },
+      },
+    )
+except Exception as e:
+    print("Index already exists, skipping creation")
 
 def genactions():
   for school in schools:
