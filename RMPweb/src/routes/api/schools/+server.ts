@@ -80,47 +80,7 @@ export async function PUT({ request }: { request: Request }) {
   let count = 0;
   let cursor = "";
   let scrapedAllProfs = false;
-  try {
   while (!scrapedAllProfs) {
-    const graphql = JSON.stringify({
-      query:
-        "query TeacherSearchResultsPageQuery(\n  $query: TeacherSearchQuery!,\n  $cursor: String,\n  $count: Int,\n) {\n  search: newSearch {\n   teachers(query: $query, first: $count, after: $cursor) {\n    didFallback\n    edges {\n      node {\n        school {\n            id\n        }\n        firstName\n        lastName\n        department\n        avgRating\n        numRatings\n        legacyId\n        avgDifficulty\n        wouldTakeAgainPercent\n        courseCodes {\n            courseName\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    resultCount\n  }\n  }\n}",
-      variables: {
-        count: 200,
-        cursor: cursor,
-        query: {
-          text: "",
-          schoolID: schoolId,
-          fallback: true,
-          departmentID: null,
-        },
-      },
-    });
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: graphql,
-      redirect: "follow",
-    };
-    const res = await fetch(
-      "https://www.ratemyprofessors.com/graphql",
-      requestOptions,
-    )
-      .then((response) => response.json())
-      .catch((error) => console.error(error));
-    if (
-      !res.data.search.teachers.pageInfo.hasNextPage ||
-      res.data.search.teachers.resCount > 10000
-    ) {
-      scrapedAllProfs = true;
-    }
-    count += res.data.search.teachers.edges.length;
-    console.log(
-      `fetched ${count} teachers/${res.data.search.teachers.resultCount}`,
-    );
-    pushToElasticsearch(res.data.search.teachers.edges);
-    cursor = res.data.search.teachers.pageInfo.endCursor;
-  }} catch (error) {
     const graphql = JSON.stringify({
       query:
         "query TeacherSearchResultsPageQuery(\n  $query: TeacherSearchQuery!,\n  $cursor: String,\n  $count: Int,\n) {\n  search: newSearch {\n   teachers(query: $query, first: $count, after: $cursor) {\n    didFallback\n    edges {\n      node {\n        school {\n            id\n        }\n        firstName\n        lastName\n        department\n        avgRating\n        numRatings\n        legacyId\n        avgDifficulty\n        wouldTakeAgainPercent\n        courseCodes {\n            courseName\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    resultCount\n  }\n  }\n}",
