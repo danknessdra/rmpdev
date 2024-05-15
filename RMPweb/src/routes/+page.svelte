@@ -42,39 +42,32 @@
     });
   });
 
-  let courses: Selected<string>[] = [];
-  let disableCourse = true;
+  let disableQuery = true;
   let disableSubmit = true;
   let schoolsLoading = false;
 
   const handleSchoolInput = debounce((event) => {
     const currentInput = event.detail.currentTarget.value;
     elasticSearch({
+      sort: [{ numRatings: { order: "desc" } }],
       index: "schools",
       query: {
         match: { name: currentInput },
       },
+      size: 20,
     }).then((result: SearchResponse) => {
+      console.log(result.hits.hits);
       schools = result.hits.hits.map((hit) => {
-        return { value: hit._id, label: hit._source.name };
+        return {
+          value: hit._id,
+          label: hit._source.name,
+        };
       });
       schoolsLoading = false;
     });
   }, 500);
   function handleSchoolSelection(event: CustomEvent<{ value: string }>) {
-    elasticSearch({
-      index: "sjsu_professors",
-      query: {
-        match_all: {},
-      },
-    }).then((result: { hits: { hits: any[] } }) => {
-      courses = result.hits.hits.map(
-        (hit: { _id: any; _source: { name: any } }) => {
-          return { value: hit._id, label: hit._source.name };
-        },
-      );
-      disableCourse = false;
-    });
+    disableQuery = false;
   }
 </script>
 
@@ -109,7 +102,7 @@
                   bind:loading={schoolsLoading}
                   on:input={(event) => {
                     disableSubmit = true;
-                    disableCourse = true;
+                    disableQuery = true;
                     schoolsLoading = true;
                     handleSchoolInput(event);
                   }}
@@ -118,26 +111,15 @@
               </Form.Control>
               <Form.FieldErrors />
             </Form.Field>
-            <Form.Field {form} name="course">
+            <Form.Field {form} name="query">
               <Form.Control let:attrs>
-                <!-- <Searchbar -->
-                <!--   items={courses} -->
-                <!--   bind:selectedValue={$formData.course} -->
-                <!--   placeholder="Course name" -->
-                <!--   inputProps={attrs} -->
-                <!--   disabled={disableCourse} -->
-                <!--   on:selectedchange={() => { -->
-                <!--     disableSubmit = false; -->
-                <!--   }} -->
-                <!-- /> -->
-
                 <!-- down the line we might be able to upgrade this to a Searchbar with suggested course names but i'm lazy -->
                 <Input
                   {...attrs}
                   placeholder="Query"
-                  bind:value={$formData.course}
+                  bind:value={$formData.query}
                   on:input={() => {
-                    disableSubmit = !Boolean($formData.course);
+                    disableSubmit = !Boolean($formData.query);
                   }}
                 />
               </Form.Control>
@@ -171,7 +153,7 @@
                   bind:loading={schoolsLoading}
                   on:input={(event) => {
                     disableSubmit = true;
-                    disableCourse = true;
+                    disableQuery = true;
                     schoolsLoading = true;
                     handleSchoolInput(event);
                   }}
@@ -190,14 +172,14 @@
                 />
               </Form.Control>
             </Form.Field>
-            <Form.Field {form} name="course">
+            <Form.Field {form} name="query">
               <Form.Control let:attrs>
                 <Input
                   {...attrs}
                   placeholder="Query"
-                  bind:value={$formData.course}
+                  bind:value={$formData.query}
                   on:input={() => {
-                    disableSubmit = !Boolean($formData.course);
+                    disableSubmit = !Boolean($formData.query);
                   }}
                 />
               </Form.Control>

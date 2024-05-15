@@ -1,7 +1,7 @@
+import elasticSearch from "$lib/elasticsearch";
 import { Client } from "@elastic/elasticsearch";
 import { json } from "@sveltejs/kit";
 
-let trackedSchools = {};
 const client = new Client({
   node: import.meta.env.VITE_ELASTICSEARCH_URL,
   // no auth for now
@@ -46,21 +46,41 @@ myHeaders.append("sec-ch-ua-platform", '"Linux"');
 async function pushToElasticsearch(teachers) {
   const operations = teachers.flatMap((teacher) => {
     const { id, ...rest } = teacher.node;
-    return [{ index: { _index: "professors" } }, { _id: id, ...rest }];
+    return [{ index: { _index: "professors", _id: id } }, { ...rest }];
   });
-  console.log(operations);
   client.bulk({
     operations,
   });
 }
 
+function updateSchoolTimestamp(schoolId: string) {
+  client.update({
+    index: "schools",
+    id: schoolId,
+    doc: {
+      time: new Date(),
+    },
+  });
+}
+
+// get school info
+export async function POST({ request }: { request: Request }) {
+  const { schoolId } = await request.json();
+  const school = await client.get({
+    index: "schools",
+    id: schoolId,
+  });
+  return json(school ?? { count: -1, date: null });
+}
+
+// scrape school course info
 export async function PUT({ request }: { request: Request }) {
   const { schoolId } = await request.json();
 
   let count = 0;
+  let cursor = "";
   let scrapedAllProfs = false;
-  function recursiveFetch(cursor = "") {
-    console.log(cursor);
+  while (!scrapedAllProfs) {
     const graphql = JSON.stringify({
       query:
         "query TeacherSearchResultsPageQuery(\n  $query: TeacherSearchQuery!,\n  $cursor: String,\n  $count: Int,\n) {\n  search: newSearch {\n   teachers(query: $query, first: $count, after: $cursor) {\n    didFallback\n    edges {\n      node {\n        school {\n            id\n        }\n        firstName\n        lastName\n        department\n        avgRating\n        numRatings\n        legacyId\n        avgDifficulty\n        wouldTakeAgainPercent\n        courseCodes {\n            courseName\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    resultCount\n  }\n  }\n}",
@@ -81,28 +101,30 @@ export async function PUT({ request }: { request: Request }) {
       body: graphql,
       redirect: "follow",
     };
-    fetch("https://www.ratemyprofessors.com/graphql", requestOptions)
+    const res = await fetch(
+      "https://www.ratemyprofessors.com/graphql",
+      requestOptions,
+    )
       .then((response) => response.json())
-      .then((result) => {
-        if (
-          !result.data.search.teachers.pageInfo.hasNextPage ||
-          result.data.search.teachers.resultCount > 100000
-        ) {
-          trackedSchools[schoolId] = { count, date: new Date() };
-          scrapedAllProfs = true;
-        }
-        count += result.data.search.teachers.edges.length;
-        console.log(
-          `fetched ${count} teachers/${result.data.search.teachers.resultCount}`,
-        );
-        console.log(result.data.search.teachers.pageInfo);
-        pushToElasticsearch(result.data.search.teachers.edges);
-        if (scrapedAllProfs) return;
-        recursiveFetch(result.data.search.teachers.pageInfo.endCursor);
-      })
       .catch((error) => console.error(error));
+    if (
+      !res.data.search.teachers.pageInfo.hasNextPage ||
+      res.data.search.teachers.resCount > 100000
+    ) {
+      scrapedAllProfs = true;
+    }
+    count += res.data.search.teachers.edges.length;
+    console.log(
+      `fetched ${count} teachers/${res.data.search.teachers.resultCount}`,
+    );
+    pushToElasticsearch(res.data.search.teachers.edges);
+    cursor = res.data.search.teachers.pageInfo.endCursor;
   }
-  recursiveFetch();
 
-  return json({ updating: "yeah" }, { status: 201 });
+  updateSchoolTimestamp(schoolId);
+  const school = await client.get({
+    index: "schools",
+    id: schoolId,
+  });
+  return json(school, { status: 201 });
 }

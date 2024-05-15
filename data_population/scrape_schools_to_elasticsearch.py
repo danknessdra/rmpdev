@@ -9,16 +9,15 @@ client = Elasticsearch("http://localhost:9200/", basic_auth=("elastic", ""))
 
 url = "https://www.ratemyprofessors.com/graphql"
 
-payload = "{\"query\":\"query SchoolSearchPaginationQuery(\\n  $count: Int!\\n  $cursor: String\\n  $query: SchoolSearchQuery!\\n) {\\n  search: newSearch {\\n    ...SchoolSearchPagination_search_1jWD3d\\n  }\\n}\\n\\nfragment SchoolSearchPagination_search_1jWD3d on newSearch {\\n  schools(query: $query, first: $count, after: $cursor) {\\n    edges {\\n      node {\\n        name\\n        avgRating\\n        city\\n        state\\n        id\\n        legacyId\\n      }\\n    }\\n    pageInfo {\\n      hasNextPage\\n      endCursor\\n    }\\n    resultCount\\n  }\\n}\",\"variables\":{\"count\":100,\"cursor\":\"\",\"query\":{\"text\":\"\"}}}"
 headers = {
   'Accept': '*/*',
   'Accept-Language': 'en-US,en;q=0.9,en-GB;q=0.8',
-  'Authorization': 'Basic dGVzdDp0ZXN0',
+  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjUzNzM4MjEiLCJleHAiOjE3MTgyNDAzNjN9.0axO44e-pkTMeDHl97ZJU4BsrzFiDnIDRNh9lRm2fE0',
   'Connection': 'keep-alive',
   'Content-Type': 'application/json',
-  'Cookie': 'cid=MJjad6RriC-20231107; ccpa-notice-viewed-02=true; oauthState=lA6taG-O9wUn2gFqM4KdEMfYySJk7T37ZYLPhfBJ6cY; oauthProvider=google',
+  'Cookie': 'cid=MJjad6RriC-20231107; ccpa-notice-viewed-02=true; oauthProvider=google; oauthState=NagOhV2L7fyVB2dIhG6JZNfI68Bfxgaz2WM56cAdOxQ; rmpAuth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjUzNzM4MjEiLCJleHAiOjE3MTgyNDAzNjN9.0axO44e-pkTMeDHl97ZJU4BsrzFiDnIDRNh9lRm2fE0; isLoggedIn=true; userinfo=5373821; isLoggedIn=true; userinfo=5373821',
   'Origin': 'https://www.ratemyprofessors.com',
-  'Referer': 'https://www.ratemyprofessors.com/search/schools?q=university',
+  'Referer': 'https://www.ratemyprofessors.com/search/schools?q=san%20jose%20sta',
   'Sec-Fetch-Dest': 'empty',
   'Sec-Fetch-Mode': 'cors',
   'Sec-Fetch-Site': 'same-origin',
@@ -42,10 +41,13 @@ if len(schools) == 0:
   nextCursor = ""
   while hasNextPage:
     # scrape all schools
-    query = "{\"query\":\"query SchoolSearchPaginationQuery(\\n  $count: Int!\\n  $cursor: String\\n  $query: SchoolSearchQuery!\\n) {\\n  search: newSearch {\\n    ...SchoolSearchPagination_search_1jWD3d\\n }\\n}\\n\\nfragment SchoolSearchPagination_search_1jWD3d on newSearch {\\n  schools(query: $query, first: $count, after: $cursor) {\\n    edges {\\n      node {\\n        name\\n        avgRating\\n        city\\n        state\\n id\\n        legacyId\\n      }\\n    }\\n    pageInfo {\\n      hasNextPage\\n      endCursor\\n    }\\n resultCount\\n  }\\n}\","
+    fetchSucceeded = False
+    query = "{\"query\":\"query SchoolSearchPaginationQuery(\\n  $count: Int!\\n  $cursor: String\\n  $query: SchoolSearchQuery!\\n) {\\n  search: newSearch {\\n    ...SchoolSearchPagination_search_1jWD3d\\n  }\\n}\\n\\nfragment SchoolSearchPagination_search_1jWD3d on newSearch {\\n  schools(query: $query, first: $count, after: $cursor) {\\n    edges {\\n      cursor\\n      node {\\n        name\\n        city\\n        state\\n        legacyId\\n        numRatings\\n        avgRating\\n        id\\n      }\\n    }\\n    pageInfo {\\n      hasNextPage\\n      endCursor\\n    }\\n    resultCount\\n  }\\n}\","
     variables = '\"variables\":{\"count\":300,\"cursor\":\"' + nextCursor + '\",\"query\":{\"text\":\"\"}}}'
-    response = requests.request("POST", url, headers=headers, data=(query + variables))
-    result: dict[str, Any] = response.json()
+    while (not fetchSucceeded):
+      response = requests.request("POST", url, headers=headers, data=(query + variables))
+      result: dict[str, Any] = response.json()
+      fetchSucceeded = result.get('errors') is None
     nextCursor: str = result['data']['search']['schools']['pageInfo']['endCursor']
     hasNextPage: bool = result['data']['search']['schools']['pageInfo']['hasNextPage']
     schools.extend(result['data']['search']['schools']['edges'])
@@ -65,6 +67,7 @@ try:
             "name": {"type": "text"},
             "state": {"type": "text"},
             "legacyId": {"type": "short"},
+            "numRatings": {"type": "short"},
           }
         },
       },

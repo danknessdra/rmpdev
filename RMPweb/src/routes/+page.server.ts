@@ -20,7 +20,7 @@ export const actions: Actions = {
       });
     }
     const searchParams = new URLSearchParams();
-    if (form.data.course) searchParams.append("course", form.data.course);
+    if (form.data.query) searchParams.append("query", form.data.query);
     if (form.data.field) searchParams.append("field", form.data.field);
     redirect(302, `/search/${form.data.schoolId}?${searchParams.toString()}`);
   },
