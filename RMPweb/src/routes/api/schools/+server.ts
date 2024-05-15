@@ -58,7 +58,7 @@ function updateSchoolTimestamp(schoolId: string) {
     index: "schools",
     id: schoolId,
     doc: {
-      time: new Date(),
+      date: new Date(),
     },
   });
 }
@@ -109,7 +109,7 @@ export async function PUT({ request }: { request: Request }) {
       .catch((error) => console.error(error));
     if (
       !res.data.search.teachers.pageInfo.hasNextPage ||
-      res.data.search.teachers.resCount > 100000
+      res.data.search.teachers.resCount > 10000
     ) {
       scrapedAllProfs = true;
     }

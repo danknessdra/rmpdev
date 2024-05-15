@@ -19,9 +19,11 @@ export const load: PageServerLoad = async ({ params, url, fetch }) => {
     body: JSON.stringify({ schoolId }),
   }).then((res) => res.json());
   const currentDate = new Date();
+  console.log(school);
+  console.log(currentDate.getTime() - new Date(school.date).getTime());
   if (
     school.date == null ||
-    school.date.getTime() - currentDate.getTime() > acceptableDelta
+    currentDate.getTime() - new Date(school.date).getTime() > acceptableDelta
   ) {
     // wait for school to be scraped
     await fetch("/api/schools", {

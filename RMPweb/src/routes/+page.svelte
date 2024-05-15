@@ -78,10 +78,24 @@
   <Tabs.Root value="search" class="w-[400px]">
     <!-- Set to 3 when adding saved searches-->
     <Tabs.List class="w-full grid grid-cols-2">
-      <Tabs.Trigger value="search" on:click={() => ($formData.field = "")}>
+      <Tabs.Trigger
+        value="search"
+        on:click={() => {
+          $formData.field = "";
+          $formData.query = "";
+          disableSubmit = true;
+        }}
+      >
         Search
       </Tabs.Trigger>
-      <Tabs.Trigger value="custom_search">Custom Search</Tabs.Trigger>
+      <Tabs.Trigger
+        value="custom_search"
+        on:click={() => {
+          $formData.field = "";
+          $formData.query = "";
+          disableSubmit = true;
+        }}>Custom Search</Tabs.Trigger
+      >
     </Tabs.List>
     <Tabs.Content value="search">
       <Card.Root class="min-w-40">
