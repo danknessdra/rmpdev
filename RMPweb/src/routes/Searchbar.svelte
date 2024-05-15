@@ -2,6 +2,7 @@
   import { Combobox, type Selected } from "bits-ui";
   import { Separator } from "$lib/components/ui/separator";
   import { createEventDispatcher } from "svelte";
+  import { slide } from "svelte/transition";
   const dispatch = createEventDispatcher();
   export let items: Selected<string>[] = [];
   export let selectedValue = "";
@@ -31,21 +32,23 @@
   />
   <Combobox.Label />
   <Combobox.Content class="bg-white border-solid border-2 rounded-md p-2">
-    {#if loading}
-      Loading...
-    {:else if items.length == 0}
-      No items found...
-    {:else}
-      {#each items as item, i (item.value)}
-        {#if i > 0}
-          <Separator />
-        {/if}
-        <Combobox.Item {...item} class="hover:bg-blue-200 p-2">
-          <Combobox.ItemIndicator />
-          {item.label}
-        </Combobox.Item>
-      {/each}
-    {/if}
+    <div transition:slide={{ duration: 200 }}>
+      {#if loading}
+        Loading...
+      {:else if items.length == 0}
+        No items found...
+      {:else}
+        {#each items as item, i (item.value)}
+          {#if i > 0}
+            <Separator />
+          {/if}
+          <Combobox.Item {...item} class="hover:bg-blue-200 p-2">
+            <Combobox.ItemIndicator />
+            {item.label}
+          </Combobox.Item>
+        {/each}
+      {/if}
+    </div>
     <Combobox.Separator />
   </Combobox.Content>
   <Combobox.Arrow />

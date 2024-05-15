@@ -3,6 +3,7 @@
   import { page } from "$app/stores";
   import * as Table from "$lib/components/ui/table";
   import "@fortawesome/fontawesome-free/css/all.min.css";
+  import { Button } from "$lib/components/ui/button";
 
   const results = $page.data.courses;
   let result_data = results.hits.hits;
@@ -17,7 +18,7 @@
     { value: "numRatings", label: "# of ratings" },
     { value: "avgRating", label: "Average Rating" },
   ];
-  let activeFilter: string;
+  let activeFilter: string = "";
   function sortData(key: string) {
     asc = !asc;
     activeFilter = key;
@@ -40,7 +41,14 @@
           <Table.Head class="w-[100px]">Name</Table.Head>
           {#each filters as filter}
             <Table.Head>
-              <button type="button" on:click={() => sortData(filter.value)}>
+              <button
+                type="button"
+                class="flex items-center justify-between align-middle w-full {activeFilter ===
+                filter.value
+                  ? 'text-blue-500'
+                  : 'text-gray-500'}"
+                on:click={() => sortData(filter.value)}
+              >
                 {filter.label}
                 {#if activeFilter === filter.value}
                   <i class="fas fa-sort-{asc ? 'up' : 'down'}"></i>

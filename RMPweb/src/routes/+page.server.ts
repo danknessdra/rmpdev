@@ -19,10 +19,9 @@ export const actions: Actions = {
         form,
       });
     }
-    const url = new URL(event.url);
-    console.log("url", url);
-    event.url.searchParams.set("course", form.data.course);
-    event.url.searchParams.set("field", form.data.field);
-    redirect(302, `/search/${form.data.schoolId}?course=${form.data.course}&field=${form.data.field}`);
+    const searchParams = new URLSearchParams();
+    if (form.data.course) searchParams.append("course", form.data.course);
+    if (form.data.field) searchParams.append("field", form.data.field);
+    redirect(302, `/search/${form.data.schoolId}?${searchParams.toString()}`);
   },
 };
