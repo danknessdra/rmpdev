@@ -84,11 +84,10 @@
   <Tabs.Root value="search" class="w-[400px]">
     <!-- Set to 3 when adding saved searches-->
     <Tabs.List class="w-full grid grid-cols-2">
-      <Tabs.Trigger value="search" on:click={() => ($formData.field = "")}
-        >Search</Tabs.Trigger
-      >
+      <Tabs.Trigger value="search" on:click={() => ($formData.field = "")}>
+        Search
+      </Tabs.Trigger>
       <Tabs.Trigger value="custom_search">Custom Search</Tabs.Trigger>
-      <!-- <Tabs.Trigger value="savedSearches">Saved Searches</Tabs.Trigger> -->
     </Tabs.List>
     <Tabs.Content value="search">
       <Card.Root class="min-w-40">
@@ -197,18 +196,6 @@
             </Form.Field>
             <Form.Field {form} name="course">
               <Form.Control let:attrs>
-                <!-- <Searchbar -->
-                <!--   items={courses} -->
-                <!--   bind:selectedValue={$formData.course} -->
-                <!--   placeholder="Course name" -->
-                <!--   inputProps={attrs} -->
-                <!--   disabled={disableCourse} -->
-                <!--   on:selectedchange={() => { -->
-                <!--     disableSubmit = false; -->
-                <!--   }} -->
-                <!-- /> -->
-
-                <!-- down the line we might be able to upgrade this to a Searchbar with suggested course names but i'm lazy -->
                 <Input
                   {...attrs}
                   placeholder="Query"
@@ -232,8 +219,8 @@
         </form>
       </Card.Root>
     </Tabs.Content>
-    <Tabs.Content value="savedSearches">
-      <!-- to be done -->
-    </Tabs.Content>
+    <!-- <Tabs.Content value="savedSearches"> -->
+    <!-- to be done -->
+    <!-- </Tabs.Content> -->
   </Tabs.Root>
 </div>

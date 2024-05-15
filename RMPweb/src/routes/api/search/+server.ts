@@ -1,8 +1,11 @@
 import { json } from "@sveltejs/kit";
 
 import { Client } from "@elastic/elasticsearch";
+
+import.meta.env.VITE_ELASTICSEARCH_URL;
+
 const client = new Client({
-  node: "http://localhost:9200",
+  node: import.meta.env.VITE_ELASTICSEARCH_URL,
   // no auth for now
   // auth: {
   //   username: "elastic",
