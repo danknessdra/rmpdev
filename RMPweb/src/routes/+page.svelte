@@ -15,6 +15,15 @@
   import { Input } from "$lib/components/ui/input/index.js";
   // import { browser, building, dev, version } from "$app/environment";
   export let data: PageData;
+  let filters_dictionary = {
+    'Average Difficulty': 'avgDifficulty',
+    'Average Rating': 'avgRating',
+    'Would take again %' : 'wouldTakeAgainPercent',
+    '# of ratings': 'numRatings'
+  }
+  function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
   const form = superForm(data.form, {
     validators: zodClient(formSchema),
     // onUpdated: ({ form: f }) => {
@@ -43,6 +52,7 @@
   let disableCourse = true;
   let disableSubmit = true;
   let schoolsLoading = false;
+
   const handleSchoolInput = debounce((event) => {
     const currentInput = event.detail.currentTarget.value;
     elasticSearch({
@@ -179,22 +189,15 @@
               </Form.Control>
               <Form.FieldErrors />
             </Form.Field>
-            <Form.Field {form} name="field">
+            <Form.Field {form} name="field" class="mb-2">
               <Form.Control let:attrs>
-              <Input
-              {...attrs}
-              placeholder="Field"
-              bind:value={$formData.field}
-              on:input={() => {
-                if ($formData.field) {
-                  disableSubmit = false;
-                } else {
-                  disableSubmit = true;
-                }
-              }}
-              
-            /></Form.Control>
+                <select class="bg-white border-solid border-2 rounded-md p-2" name="Field" bind:value={$formData.field}>
+                  {#each ['Average Difficulty', 'Average Rating', '# of ratings', 'Would take again %'] as filter, i}
+                    <option value={filters_dictionary[filter]} selected={$formData.field == getKeyByValue(filters_dictionary, $formData.field)}>{filter}</option>
+                  {/each}
+                </select></Form.Control>
             </Form.Field>
+
             <Form.Field {form} name="course">
               <Form.Control let:attrs>
                 <!-- <Searchbar -->
