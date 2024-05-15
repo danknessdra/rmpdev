@@ -1,7 +1,7 @@
 import { Client } from "@elastic/elasticsearch";
 import { json } from "@sveltejs/kit";
 
-let tracked_schools = {};
+let trackedSchools = {};
 const client = new Client({
   node: import.meta.env.VITE_ELASTICSEARCH_URL,
   // no auth for now
@@ -44,11 +44,13 @@ myHeaders.append("sec-ch-ua-mobile", "?0");
 myHeaders.append("sec-ch-ua-platform", '"Linux"');
 
 async function pushToElasticsearch(teachers) {
+  const operations = teachers.flatMap((teacher) => {
+    const { id, ...rest } = teacher.node;
+    return [{ index: { _index: "professors" } }, { _id: id, ...rest }];
+  });
+  console.log(operations);
   client.bulk({
-    operations: teachers.flatMap((teacher) => {
-      const { id, ...rest } = teacher.node;
-      return [{ index: { _index: "professors" } }, { _id: id, ...rest }];
-    }),
+    operations,
   });
 }
 
@@ -56,6 +58,7 @@ export async function PUT({ request }: { request: Request }) {
   const { schoolId } = await request.json();
 
   let count = 0;
+  let scrapedAllProfs = false;
   function recursiveFetch(cursor = "") {
     console.log(cursor);
     const graphql = JSON.stringify({
@@ -81,11 +84,12 @@ export async function PUT({ request }: { request: Request }) {
     fetch("https://www.ratemyprofessors.com/graphql", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        if (!result.data.search.teachers.pageInfo.hasNextPage) {
-          client.indices.refresh({ index: "professors" });
-          // technically if we don't return it will just infinitely search through all profs
-          tracked_schools[schoolId] = count;
-          return;
+        if (
+          !result.data.search.teachers.pageInfo.hasNextPage ||
+          result.data.search.teachers.resultCount > 100000
+        ) {
+          trackedSchools[schoolId] = { count, date: new Date() };
+          scrapedAllProfs = true;
         }
         count += result.data.search.teachers.edges.length;
         console.log(
@@ -93,6 +97,7 @@ export async function PUT({ request }: { request: Request }) {
         );
         console.log(result.data.search.teachers.pageInfo);
         pushToElasticsearch(result.data.search.teachers.edges);
+        if (scrapedAllProfs) return;
         recursiveFetch(result.data.search.teachers.pageInfo.endCursor);
       })
       .catch((error) => console.error(error));
