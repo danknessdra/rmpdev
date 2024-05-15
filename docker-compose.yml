@@ -1,7 +1,17 @@
 services:
+  sveltekit:
+    build:
+      context: RMPweb/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - elasticsearch
+
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.2
     container_name : kibana
+    depends_on:
+      - elasticsearch
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
@@ -13,8 +23,8 @@ services:
     container_name: elasticsearch
     image: elasticsearch:8.12.2
     ports:
-      - 127.0.0.1:9200:9200
-      - 127.0.0.1:9300:9300
+      - 9200:9200
+      - 9300:9300
     environment:
       - "discovery.type=single-node"
       - xpack.security.enabled=false
