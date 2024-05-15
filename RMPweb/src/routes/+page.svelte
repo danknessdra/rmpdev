@@ -76,7 +76,7 @@
   class="w-full h-full flex flex-col justify-center items-center align-middle"
 >
   <Tabs.Root value="search" class="w-[400px]">
-    <!-- Set to 3 when adding saved searches-->
+    <!-- List of Tabs: Set to 3 when adding saved searches-->
     <Tabs.List class="w-full grid grid-cols-2">
       <Tabs.Trigger
         value="search"
@@ -97,6 +97,8 @@
         }}>Custom Search</Tabs.Trigger
       >
     </Tabs.List>
+
+    <!-- General Search Tab -->
     <Tabs.Content value="search">
       <Card.Root class="min-w-40">
         <Card.Header>
@@ -148,6 +150,7 @@
         </form>
       </Card.Root>
     </Tabs.Content>
+    <!-- Custom Search Tab -->
     <Tabs.Content value="custom_search">
       <Card.Root class="min-w-40">
         <Card.Header>
