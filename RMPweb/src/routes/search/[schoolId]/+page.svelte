@@ -20,9 +20,16 @@
     return;
 	}
 </script>
-
+<style>
+  .table-container {
+      width: 80%;
+      margin: 0 auto; 
+      padding: 20px; 
+  }
+</style>
 
 {#if results}
+<div class="table-container">
   <Table.Root>
     <!-- <Table.Caption></Table.Caption> -->
     <Table.Header>
@@ -55,6 +62,7 @@
     {/each}
     </Table.Body>
   </Table.Root>
+  </div>
 {:else}
   Error with loading data!
 {/if}

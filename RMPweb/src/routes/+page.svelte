@@ -85,9 +85,9 @@
     <Tabs.Content value="search">
       <Card.Root class="min-w-40">
         <Card.Header>
-          <Card.Title>Courseview Search</Card.Title>
+          <Card.Title>General Search</Card.Title>
           <Card.Description>
-            Look up all the professors for a course at your school...
+            Search for anything on RateMyProfessors. 
           </Card.Description>
         </Card.Header>
         <form method="POST" use:enhance>
@@ -127,7 +127,7 @@
                 <!-- down the line we might be able to upgrade this to a Searchbar with suggested course names but i'm lazy -->
                 <Input
                   {...attrs}
-                  placeholder="Course name"
+                  placeholder="Query"
                   bind:value={$formData.course}
                   on:input={() => {
                     if ($formData.course) {
