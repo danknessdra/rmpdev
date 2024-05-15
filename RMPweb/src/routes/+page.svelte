@@ -23,7 +23,7 @@
   });
 
   const { form: formData, enhance } = form;
-
+  $formData.field=""
   let schools: Selected<string>[] = [];
   onMount(() => {
     elasticSearch({
@@ -78,9 +78,11 @@
   class="w-full h-full flex flex-col justify-center items-center align-middle"
 >
   <Tabs.Root value="search" class="w-[400px]">
+    <!-- Set to 3 when adding saved searches-->
     <Tabs.List class="w-full grid grid-cols-2">
-      <Tabs.Trigger value="search">Search</Tabs.Trigger>
-      <Tabs.Trigger value="savedSearches">Saved Searches</Tabs.Trigger>
+      <Tabs.Trigger value="search" on:click={() => $formData.field=""}>Search</Tabs.Trigger>
+      <Tabs.Trigger value="custom_search">Custom Search</Tabs.Trigger>
+      <!-- <Tabs.Trigger value="savedSearches">Saved Searches</Tabs.Trigger> -->
     </Tabs.List>
     <Tabs.Content value="search">
       <Card.Root class="min-w-40">
@@ -110,6 +112,88 @@
                 />
               </Form.Control>
               <Form.FieldErrors />
+            </Form.Field>
+            <Form.Field {form} name="course">
+              <Form.Control let:attrs>
+                <!-- <Searchbar -->
+                <!--   items={courses} -->
+                <!--   bind:selectedValue={$formData.course} -->
+                <!--   placeholder="Course name" -->
+                <!--   inputProps={attrs} -->
+                <!--   disabled={disableCourse} -->
+                <!--   on:selectedchange={() => { -->
+                <!--     disableSubmit = false; -->
+                <!--   }} -->
+                <!-- /> -->
+
+                <!-- down the line we might be able to upgrade this to a Searchbar with suggested course names but i'm lazy -->
+                <Input
+                  {...attrs}
+                  placeholder="Query"
+                  bind:value={$formData.course}
+                  on:input={() => {
+                    if ($formData.course) {
+                      disableSubmit = false;
+                    } else {
+                      disableSubmit = true;
+                    }
+                  }}
+                />
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+          </Card.Content>
+          <Card.Footer class="w-full flex justify-end">
+            <!-- <Button>Reset</Button> -->
+            <Form.Button disabled={disableSubmit}>Search</Form.Button>
+          </Card.Footer>
+        </form>
+      </Card.Root>
+    </Tabs.Content>
+    <Tabs.Content value="custom_search">
+      <Card.Root class="min-w-40">
+        <Card.Header>
+          <Card.Title>Custom Search</Card.Title>
+          <Card.Description>
+            Search with specific criteria for RateMyProfessors.com.
+          </Card.Description>
+        </Card.Header>
+        <form method="POST" use:enhance>
+          <Card.Content>
+            <Form.Field {form} name="schoolId">
+              <Form.Control let:attrs>
+                <Searchbar
+                  bind:items={schools}
+                  placeholder="School name"
+                  inputProps={attrs}
+                  bind:selectedValue={$formData.schoolId}
+                  bind:loading={schoolsLoading}
+                  on:input={(event) => {
+                    disableSubmit = true;
+                    disableCourse = true;
+                    schoolsLoading = true;
+                    handleSchoolInput(event);
+                  }}
+                  on:selectedchange={handleSchoolSelection}
+                />
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+            <Form.Field {form} name="field">
+              <Form.Control let:attrs>
+              <Input
+              {...attrs}
+              placeholder="Field"
+              bind:value={$formData.field}
+              on:input={() => {
+                if ($formData.field) {
+                  disableSubmit = false;
+                } else {
+                  disableSubmit = true;
+                }
+              }}
+              
+            /></Form.Control>
             </Form.Field>
             <Form.Field {form} name="course">
               <Form.Control let:attrs>
