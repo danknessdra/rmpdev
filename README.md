@@ -4,7 +4,7 @@ By Raymond Lin (danknessdra) and David Le (pynappo)
 
 This is a MVP for a [RateMyProfessors.com](https://ratemyprofessors.com) website that dynamically scrapes data from RMP and lets users search over it with Elasticsearch.
 
-Running:
+## Running:
 
 start docker
 ```bash
