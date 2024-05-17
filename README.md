@@ -20,6 +20,6 @@ source .venv/bin/activate
 python scrape_schools_to_elasticsearch.py
 ```
 
-Frontend: localhost:3000
-ElasticSearch Kibana: localhost:5601
-ElasticSearch: localhost:9200
+- Frontend: localhost:3000
+- ElasticSearch Kibana: localhost:5601
+- ElasticSearch: localhost:9200
