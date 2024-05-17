@@ -1,8 +1,8 @@
-# RateMyProfessors.dev
+# RateMyProfessors.help
 
 By Raymond Lin (danknessdra) and David Le (pynappo)
 
-This is a MVP for a [RateMyProfessors.com](https://ratemyprofessors.com) website that dynamically scrapes data from RMP and lets users search over it with Elasticsearch.
+This is a MVP for an alternate [RateMyProfessors.com](https://ratemyprofessors.com) frontend that dynamically scrapes data from RMP and lets users search over it with Elasticsearch.
 
 ## Running:
 
